@@ -1,8 +1,6 @@
 package br.com.alura.screenmatch;
 
-import br.com.alura.screenmatch.model.DataSeries;
-import br.com.alura.screenmatch.service.DataConverter;
-import br.com.alura.screenmatch.service.OmdbApiConsumer;
+import br.com.alura.screenmatch.principal.Main;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,11 +14,7 @@ public class ScreenmatchApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		var apiConsumer = new OmdbApiConsumer();
-		var json = apiConsumer.fetchData("https://www.omdbapi.com/?t=the+last+of+us&apikey=d1a73fd4");
-		System.out.println(json);
-		DataConverter converter = new DataConverter();
-		DataSeries data = converter.convertData(json, DataSeries.class);
-		System.out.println(data);
+		Main main = new Main();
+		main.displayMenu();
 	}
 }
