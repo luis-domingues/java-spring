@@ -2,12 +2,15 @@ package br.com.alura.screenmatch.principal;
 
 import br.com.alura.screenmatch.model.DataSeason;
 import br.com.alura.screenmatch.model.DataSeries;
+import br.com.alura.screenmatch.model.Series;
 import br.com.alura.screenmatch.service.DataConverter;
 import br.com.alura.screenmatch.service.OmdbApiConsumer;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Main {
     private Scanner scanner = new Scanner(System.in);
@@ -23,12 +26,13 @@ public class Main {
             var menu = """
                     1 - search for series
                     2 - search for episodes
+                    3 - list searched series
                                 
                     0 - exit
                     """;
 
             System.out.println(menu);
-            scanner.nextInt();
+            option = scanner.nextInt();
             scanner.nextLine();
 
             switch (option) {
@@ -38,17 +42,22 @@ public class Main {
                 case 2:
                     searchEpisodeBySeries();
                     break;
+                case 3:
+                    listSearchedSeries();
+                    break;
                 case 0:
                     System.out.println("Exiting...");
                     break;
                 default:
                     System.out.println("Invalid option");
+                    break;
             }
         }
     }
 
     private void searchSeries() {
         DataSeries dataSeries = getDataSeries();
+        dataSeriesList.add(dataSeries);
         System.out.println(dataSeries);
     }
 
@@ -71,5 +80,16 @@ public class Main {
         }
 
         dataSeasonList.forEach(System.out::println);
+    }
+
+    private void listSearchedSeries() {
+        List<Series> seriesList = new ArrayList<>();
+        seriesList = dataSeriesList.stream()
+                        .map(d -> new Series(d))
+                                .collect(Collectors.toList());
+
+        seriesList.stream()
+                .sorted(Comparator.comparing(Series::getGenre))
+                .forEach(System.out::println);
     }
 }
